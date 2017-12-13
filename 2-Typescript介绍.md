@@ -6,6 +6,13 @@ template: gaia
 TypeScript基础<p style="text-align:right;font-size:28px;margin-right:50px;color:#cFc;">:star: by calidion</p>
 ===
 ---
+环境建立
+===
+```
+npm install ts-node
+```
+---
+
 数据类型
 ===
 不包括ES6已经有的类型
@@ -1046,6 +1053,45 @@ function configurable(value: boolean) {
 }
 
 ```
+
+4. 属性装饰器(Property Decorators)
+
+```
+class Greeter {
+    @format("Hello, %s")
+    greeting: string;
+
+    constructor(message: string) {
+        this.greeting = message;
+    }
+    greet() {
+        let formatString = getFormat(this, "greeting");
+        return formatString.replace("%s", this.greeting);
+    }
+}
+
+import "reflect-metadata";
+
+const formatMetadataKey = Symbol("format");
+
+function format(formatString: string) {
+    return Reflect.metadata(formatMetadataKey, formatString);
+}
+
+function getFormat(target: any, propertyKey: string) {
+    return Reflect.getMetadata(formatMetadataKey, target, propertyKey);
+}
+
+```
+
+5. 参数装饰器(Parameter Decorators)
+(略)
+
+
+
+
+
+
 
 
 
