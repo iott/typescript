@@ -9,7 +9,8 @@ TypeScript基础<p style="text-align:right;font-size:28px;margin-right:50px;colo
 环境建立
 ===
 ```
-npm install ts-node
+npm install -g typescript
+npm install -g ts-node
 ```
 ---
 
@@ -986,6 +987,26 @@ x
 各类装饰器
 ===
 1. 类装饰器(Class Decorators)
+
+
+```
+function mixins(...list) {
+  return function (target) {
+    Object.assign(target.prototype, ...list)
+  }
+}
+
+const Foo = {
+  foo() { console.log('foo') }
+};
+
+@mixins(Foo)
+class MyClass {}
+
+let obj = new MyClass();
+obj['foo']() // 'foo'
+```
+
 
 ```
 @sealed
