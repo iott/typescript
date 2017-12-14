@@ -3,7 +3,10 @@ let b = ['a', 'b', 'c'];
 
 for (let i = 0; i < a.length; i++) {
       let x = a[i]
+      console.log(x);
 }
+console.log(typeof x);
+
 for (let i = 0; i < b.length; i++) {
       let y = b[i]
 }

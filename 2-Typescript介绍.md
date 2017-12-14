@@ -9,8 +9,23 @@ TypeScript基础<p style="text-align:right;font-size:28px;margin-right:50px;colo
 环境建立
 ===
 ```
-npm install ts-node
+npm install -g typescript
+npm install -g ts-node
 ```
+---
+类型强弱
+===
+强类型的语言：
+C/C++， Java, Pascal/Delphi， C#
+弱类型的语言：
+js, php, python, perl, lua
+
+---
+为什么要使用TypeScript?
+===
+1. 它是有类型约束的语言
+2. 快速定位，提供出错
+
 ---
 
 数据类型
@@ -30,6 +45,7 @@ x = ["hello", 10]; // OK
 // Initialize it incorrectly
 x = [10, "hello"]; // Error
 ```
+---
 
 2. Enum
 
@@ -51,6 +67,8 @@ notSure = "maybe a string instead";
 notSure = false; // okay, definitely a boolean
 ```
 
+---
+
 4. Void
 
 与Any相关，表示没有东西。
@@ -67,6 +85,8 @@ function warnUser(): void {
 let unusable: void = undefined;
 ```
 
+---
+
 5. Null 和 Undefined
 
 ```
@@ -76,6 +96,8 @@ let n: null = null;
 
 默认是所有类型的子类型，可以赋值给任何类型
 开启`--strictNullChecks`后，只能赋值给void类型与自己
+
+---
 
 6. Never
 
