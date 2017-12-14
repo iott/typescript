@@ -16,5 +16,7 @@ class aa {
 // console.log(aa['aa']);
 console.log(aa['aa']);
 
+let ab = 100;
+
 
 

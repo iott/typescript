@@ -99,6 +99,22 @@ function infiniteLoop(): never {
 ```
 
 ---
+类型推理(Type Inference)
+===
+没有指定类型时，会有一个推理的过程
+比如
+```
+let x = 3;
+```
+x会得到number类型。
+
+这种推理会出现在：
+1. 初始化变量或者成员
+2. 设置参数默认值
+3. 确定函数返回类型时
+
+---
+
 类型断言(Type assertions)
 ===
 
@@ -1107,6 +1123,11 @@ function getFormat(target: any, propertyKey: string) {
 
 5. 参数装饰器(Parameter Decorators)
 (略)
+
+
+---
+
+
 
 
 
