@@ -1,0 +1,12 @@
+let someValue: any = "this is a string";
+let someValue1: any = 1;
+let someValue2: any = '1000';
+let someValue3: any = '1000aaa';
+let str: string = someValue;
+let strLength: number = (<string>someValue).length;
+let str2: number = (someValue as string).length;
+let strLength1: number = (<string>someValue1).length;
+let strLength2: number = (<number>someValue2);
+let strLength3: number = (<number>someValue3);
+  console.log(strLength2);
+  console.log(strLength3);

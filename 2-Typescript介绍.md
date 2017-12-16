@@ -150,6 +150,8 @@ let someValue: any = "this is a string";
 let strLength: number = (<string>someValue).length;
 ```
 
+---
+
 2. 变量 as 类型
 ```
 let someValue: any = "this is a string";
@@ -173,6 +175,8 @@ let myObj = {size: 10, label: "Size 10 Object"};
 printLabel(myObj);
 ```
 
+---
+
 这里printLabel要求参数有一个包含label的属性。
 
 ```
@@ -188,16 +192,25 @@ let myObj = {size: 10, label: "Size 10 Object"};
 printLabel(myObj);
 ```
 
+
+---
+
 2. 可选择属性(?)
 
 在常规的属性后面加上`?`号，这样这个属性可以不必赋值。
+比如:
 
 ```
 interface SquareConfig {
     color?: string;
     width?: number;
 }
+```
 
+---
+创建一个函数：
+
+```
 function createSquare(config: SquareConfig): {color: string; area: number} {
     let newSquare = {color: "white", area: 100};
     if (config.color) {
@@ -212,8 +225,10 @@ function createSquare(config: SquareConfig): {color: string; area: number} {
 let mySquare = createSquare({color: "black"});
 ```
 
-如果打错了名字，会有错误提示。
-```
+---
+
+这时如果打错了名字，会有错误提示。
+
 比如`config.color`打成了`config.clor`
 
 ```
@@ -224,6 +239,7 @@ let mySquare = createSquare({color: "black"});
     }
     ...
 ```
+---
 
 3. 只读属性
 
@@ -239,10 +255,14 @@ let p1: Point = { x: 10, y: 20 };
 p1.x = 5; // error!
 
 ```
+---
+const vs readonly
+===
 
-> const vs readonly
-> const => 变量
-> readonly => 属性
+a. const => 变量
+b. readonly => 属性
+
+---
 
 4. 过分的类型检查（Excess Property Checks)
 
@@ -258,7 +278,11 @@ function createSquare(config: SquareConfig): void {
 }
 
 ```
+
+---
+
 调用
+
 ```
 let mySquare = createSquare({ colour: "red", width: 100 });
 ```
@@ -271,6 +295,8 @@ var obj = { colour: "red", width: 100 };
 let mySquare = createSquare(obj);
 
 ```
+---
+
 
 5. 函数类型（Function Types）
 
@@ -281,6 +307,8 @@ interface SearchFunc {
     (source: string, subString: string): boolean;
 }
 ```
+---
+
 
 定义：
 ```
@@ -290,6 +318,7 @@ mySearch = function(source: string, subString: string) {
     return result > -1;
 }
 ```
+---
 
 只检查函数类型，参数名不检查，即下面的代码仍有效。
 ```
@@ -299,6 +328,8 @@ mySearch1 = function(src: string, sub: string): boolean {
     return result > -1;
 }
 ```
+
+---
 
 6. 可索引类型(Indexable Types)
 示例：
@@ -314,10 +345,15 @@ myArray = ["Bob", "Fred"];
 let myStr: string = myArray[0];
 // Bob
 ```
+
 这里定义了StringArray这个接口，他是一个基于数值的索引，它的返回值是字符串。
+
+---
 
 除了number外，可以索引的类型还有string。但是不能同时使用数值与字符两种类型，原因是数值都会转化成为字符。
 即`100`在对象里会首先转化成`'100'`再获取对象的值。
+
+---
 
 ```
 class Animal {
@@ -340,6 +376,8 @@ interface Okay2 {
 }
 ```
 
+---
+
 7. 类类型（Class Types）
 
 可以在接口的属性里使用类
@@ -354,6 +392,8 @@ class Clock implements ClockInterface {
     constructor(h: number, m: number) { }
 }
 ```
+
+---
 
 或者指定还有类的方法
 
@@ -372,6 +412,8 @@ class Clock implements ClockInterface {
 }
 ```
 
+---
+
 8. 接口扩展（Extending Interfaces)
 
 a. 单个扩展
@@ -388,6 +430,8 @@ let square = <Square>{};
 square.color = "blue";
 square.sideLength = 10;
 ```
+
+---
 
 b. 多个扩展
 
@@ -410,6 +454,7 @@ square.sideLength = 10;
 square.penWidth = 5.0;
 ```
 
+---
 
 9. 混合类型(Hybrid Types)
 
@@ -433,6 +478,8 @@ c.reset();
 c.interval = 5.0;
 ```
 
+---
+
 10. 接口扩展类(Interfaces Extending Classes)
 
 示例：
@@ -447,9 +494,15 @@ interface SelectableControl extends Control {
 }
 ```
 
+---
+
 SelectableControl包含所有Control的属性，包括private属性state;
 因为 包含有Control的私有属性，所以SelectableControl只能被Control的子类实现， 即Button类。
 而Image类无法实现SelectableControl。
+
+
+---
+
 
 ```
 class Button extends Control implements SelectableControl {
@@ -469,7 +522,146 @@ class Location {
 
 }
 ```
+---
+模块
+===
+1. export
 
+- export一个声明
+
+导出接口声明
+
+```
+// Validation.ts
+export interface StringValidator {
+    isAcceptable(s: string): boolean;
+}
+```
+
+---
+
+
+导出变量与类声明
+
+```
+// ZipCodeValidator.ts
+export const numberRegexp = /^[0-9]+$/;
+
+export class ZipCodeValidator implements StringValidator {
+    isAcceptable(s: string) {
+        return s.length === 5 && numberRegexp.test(s);
+    }
+}
+```
+
+---
+
+- export一个语句
+
+```
+class ZipCodeValidator implements StringValidator {
+    isAcceptable(s: string) {
+        return s.length === 5 && numberRegexp.test(s);
+    }
+}
+export { ZipCodeValidator };
+export { ZipCodeValidator as mainValidator };
+```
+
+- 重新导出
+```
+export * from "./Validation"; // exports interface 'StringValidator'
+```
+
+---
+
+2. import
+
+- 导入一个参数
+
+```
+import { ZipCodeValidator } from "./ZipCodeValidator";
+let myValidator = new ZipCodeValidator();
+```
+
+- 重命名一个导入
+
+```
+import { ZipCodeValidator as ZCV } from "./ZipCodeValidator";
+let myValidator = new ZCV();
+```
+
+- 导入全部到一个变量
+```
+import * as validator from "./ZipCodeValidator";
+let myValidator = new validator.ZipCodeValidator();
+```
+
+---
+
+- 只为副作用导入(Import a module for side-effects only)
+
+```
+import "./my-module.js";
+```
+
+---
+
+3. 默认导出(Default exports)
+
+每个模块有且只有一个可以默认的导出。默认导出会让引入变的简单。
+
+```
+// ZipCodeValidator.ts
+export default class ZipCodeValidator {
+    static numberRegexp = /^[0-9]+$/;
+    isAcceptable(s: string) {
+        return s.length === 5 && ZipCodeValidator.numberRegexp.test(s);
+    }
+}
+```
+
+```
+// exe.ts
+import validator from "./ZipCodeValidator";
+
+let myValidator = new validator();
+```
+
+---
+
+4. export = 和 import = require()
+
+通常我们不使用export =，如果一旦使用了export =，那么在ts里就必须使用import = require()这种格式调用。
+
+```
+// ZipCodeValidator.ts
+let numberRegexp = /^[0-9]+$/;
+class ZipCodeValidator {
+    isAcceptable(s: string) {
+        return s.length === 5 && numberRegexp.test(s);
+    }
+}
+export = ZipCodeValidator;
+```
+
+---
+
+
+```
+import zip = require("./ZipCodeValidator");
+
+// Some samples to try
+let strings = ["Hello", "98052", "101"];
+
+// Validators to use
+let validator = new zip();
+
+// Show whether each string passed each validator
+strings.forEach(s => {
+  console.log(`"${ s }" - ${ validator.isAcceptable(s) ? "matches" : "does not match" }`);
+});
+```
 ---
 类(Classes)
 ===
@@ -573,7 +765,7 @@ console.log(grid2.calculateDistanceFromOrigin({x: 10, y: 10}));
 
 4. 抽象类(Abstract Classes)
 
-抽象类必须被继承才能使用，同时必须包含抽象方法。
+抽象类必须被继承才能使用，同时必须包含抽象方法。抽象类可以规定子类的必须的属性与方法。
 
 ```
 abstract class Animal {
@@ -583,6 +775,8 @@ abstract class Animal {
     }
 }
 ```
+
+---
 
 ```
 abstract class Department {
@@ -619,16 +813,15 @@ department.printName();
 department.printMeeting();
 department.generateReports(); // error: method doesn't exist on declared abstract type
 ```
-
 ---
-范型(Generics)
+泛型(Generics)
 ===
-高级主题，范型主要是给那些写底层的库的程序员使用的。
+高级主题，泛型主要是给那些写底层的库的程序员使用的。
 这些库要求不要API要定义的好，并且还尽量通用化。
 要求组件能适应当前与未来的变化。
 这个时候你可以考虑选择范型。
 
-1. 范型的Hello World程序（Hello World of Generics）
+1. 泛型的Hello World程序（Hello World of Generics）
 查看下面的代码：
 
 - 处理数值
@@ -659,7 +852,7 @@ function identity<T>(arg: T): T {
 let output = identity<string>("myString");
 ```
 
-2. 使用范型变量(Working with Generic Type Variables)
+2. 使用泛型变量(Working with Generic Type Variables)
 
 有时候，我们需要泛型还能提供更多的信息。比如提供长度信息，这时光有泛型本身就会不够。这是时候，我们需要我们将已经有的类型与泛型结合起来。比如跟数组的结合。
 
@@ -829,130 +1022,6 @@ function createInstance<A extends Animal>(c: new () => A): A {
 
 createInstance(Lion).keeper.nametag;  // typechecks!
 createInstance(Bee).keeper.hasMask;   // typechecks!
-```
-
----
-模块
-===
-1. export
-
-- export一个声明
-
-导出接口声明
-
-```
-// Validation.ts
-export interface StringValidator {
-    isAcceptable(s: string): boolean;
-}
-```
-
-导出变量与类声明
-
-```
-// ZipCodeValidator.ts
-export const numberRegexp = /^[0-9]+$/;
-
-export class ZipCodeValidator implements StringValidator {
-    isAcceptable(s: string) {
-        return s.length === 5 && numberRegexp.test(s);
-    }
-}
-```
-
-- export一个语句
-
-```
-class ZipCodeValidator implements StringValidator {
-    isAcceptable(s: string) {
-        return s.length === 5 && numberRegexp.test(s);
-    }
-}
-export { ZipCodeValidator };
-export { ZipCodeValidator as mainValidator };
-```
-
-- 重新导出
-```
-export * from "./Validation"; // exports interface 'StringValidator'
-```
-
-2. import
-
-- 导入一个参数
-
-```
-import { ZipCodeValidator } from "./ZipCodeValidator";
-let myValidator = new ZipCodeValidator();
-```
-
-- 重命名一个导入
-
-```
-import { ZipCodeValidator as ZCV } from "./ZipCodeValidator";
-let myValidator = new ZCV();
-```
-
-- 导入全部到一个变量
-```
-import * as validator from "./ZipCodeValidator";
-let myValidator = new validator.ZipCodeValidator();
-```
-
-- 只为副作用导入(Import a module for side-effects only)
-
-```
-import "./my-module.js";
-```
-
-3. 默认导出(Default exports)
-
-每个模块有且只有一个可以默认的导出。默认导出会让引入变的简单。
-
-```
-// ZipCodeValidator.ts
-export default class ZipCodeValidator {
-    static numberRegexp = /^[0-9]+$/;
-    isAcceptable(s: string) {
-        return s.length === 5 && ZipCodeValidator.numberRegexp.test(s);
-    }
-}
-```
-
-```
-// exe.ts
-import validator from "./ZipCodeValidator";
-
-let myValidator = new validator();
-```
-
-4. export = 和 import = require()
-通常我们不使用export =，如果一旦使用了export =，那么在ts里就必须使用import = require()这种格式调用。
-
-```
-// ZipCodeValidator.ts
-let numberRegexp = /^[0-9]+$/;
-class ZipCodeValidator {
-    isAcceptable(s: string) {
-        return s.length === 5 && numberRegexp.test(s);
-    }
-}
-export = ZipCodeValidator;
-```
-
-```
-import zip = require("./ZipCodeValidator");
-
-// Some samples to try
-let strings = ["Hello", "98052", "101"];
-
-// Validators to use
-let validator = new zip();
-
-// Show whether each string passed each validator
-strings.forEach(s => {
-  console.log(`"${ s }" - ${ validator.isAcceptable(s) ? "matches" : "does not match" }`);
-});
 ```
 
 ---

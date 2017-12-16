@@ -1,0 +1,12 @@
+var someValue = "this is a string";
+var someValue1 = 1;
+var someValue2 = '1000';
+var someValue3 = '1000aaa';
+var str = someValue;
+var strLength = someValue.length;
+var str2 = someValue.length;
+var strLength1 = someValue1.length;
+var strLength2 = someValue2;
+var strLength3 = someValue3;
+console.log(strLength2);
+console.log(strLength3);
