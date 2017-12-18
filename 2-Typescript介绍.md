@@ -668,7 +668,7 @@ strings.forEach(s => {
 
 1. 访问控制符(public , private, protected)
 
-- 默认public,但推荐显式打出来public，如下：
+- 默认public, 但推荐显式打出来public，如下：
 ```
 class Animal {
     public name: string;
@@ -678,6 +678,8 @@ class Animal {
     }
 }
 ```
+
+---
 
 - private, 除了类内部使用，其它地方不能使用
 
@@ -689,6 +691,8 @@ class Animal {
 
 new Animal("Cat").name; // Error: 'name' is private;
 ```
+
+----
 
 - protected, 类内部与子类内部可以使用，其它地方不可使用
 
@@ -711,10 +715,18 @@ class Employee extends Person {
     }
 }
 
+```
+
+----
+
+```
 let howard = new Employee("Howard", "Sales");
 console.log(howard.getElevatorPitch());
 console.log(howard.name); // error
+
 ```
+
+---
 
 2. 只读标识（Readonly modifier)
 
@@ -731,6 +743,9 @@ class Octopus {
 let dad = new Octopus("Man with the 8 strong legs");
 dad.name = "Man with the 3-piece suit"; // error! name is readonly.
 ```
+
+---
+
 - 参数只读
 
 ```
@@ -740,6 +755,8 @@ class Octopus {
     }
 }
 ```
+
+---
 
 3. 静态属性(Static Properties)
 
@@ -762,6 +779,8 @@ let grid2 = new Grid(5.0);  // 5x scale
 console.log(grid1.calculateDistanceFromOrigin({x: 10, y: 10}));
 console.log(grid2.calculateDistanceFromOrigin({x: 10, y: 10}));
 ```
+
+---
 
 4. 抽象类(Abstract Classes)
 
@@ -791,6 +810,12 @@ abstract class Department {
     abstract printMeeting(): void; // must be implemented in derived classes
 }
 
+```
+
+---
+
+```
+
 class AccountingDepartment extends Department {
 
     constructor() {
@@ -806,6 +831,12 @@ class AccountingDepartment extends Department {
     }
 }
 
+```
+
+---
+
+```
+
 let department: Department; // ok to create a reference to an abstract type
 department = new Department(); // error: cannot create an instance of an abstract class
 department = new AccountingDepartment(); // ok to create and assign a non-abstract subclass
@@ -813,7 +844,9 @@ department.printName();
 department.printMeeting();
 department.generateReports(); // error: method doesn't exist on declared abstract type
 ```
+
 ---
+
 泛型(Generics)
 ===
 高级主题，泛型主要是给那些写底层的库的程序员使用的。
@@ -821,8 +854,14 @@ department.generateReports(); // error: method doesn't exist on declared abstrac
 要求组件能适应当前与未来的变化。
 这个时候你可以考虑选择范型。
 
+作用：
+1. 函数或者变量能处理各种类型
+2. 同时保留类型信息
+
+---
+
 1. 泛型的Hello World程序（Hello World of Generics）
-查看下面的代码：
+考查下面的代码：
 
 - 处理数值
 ```
@@ -839,6 +878,8 @@ function identity(arg: any): any {
 }
 ```
 
+---
+
 - 处理所有类型，但仍可以知道数据的类型
 
 ```
@@ -851,6 +892,7 @@ function identity<T>(arg: T): T {
 ```
 let output = identity<string>("myString");
 ```
+---
 
 2. 使用泛型变量(Working with Generic Type Variables)
 
@@ -864,6 +906,8 @@ function loggingIdentity<T>(arg: T[]): T[] {
 ```
 这样我们就可以获得泛型类型的长度信息。
 
+---
+
 或者更直观的写，其中Array可以被其它的类型替换。
 
 ```
@@ -872,6 +916,8 @@ function loggingIdentity<T>(arg: Array<T>): Array<T> {
     return arg;
 }
 ```
+
+---
 
 3. 泛型类型(Generic Types)
 
@@ -893,6 +939,26 @@ let myIdentity: <U>(arg: U) => U = identity;
 ```
 let myIdentity: {<T>(arg: T): T} = identity;
 ```
+---
+
+```
+function identity<T>(arg: T): T {
+    return arg;
+}
+
+let myIdentity: (<T>(arg: T) => T) = identity;
+
+function a(a:number) : string{
+    return "hello";
+}
+
+let b = a;
+let c: (<T>(arg: T) => T) = identity;
+let d: (a:number) => string = a;
+
+console.log(myIdentity('ssoso'));
+```
+---
 
 - 可以定义成interface
 
@@ -914,6 +980,8 @@ interface GenericIdentityFn<T> {
 let myIdentity: GenericIdentityFn<number> = identity;
 ```
 
+---
+
 4. 泛型类(Generic Classes)
 
 - 定义
@@ -933,6 +1001,8 @@ myGenericNumber.zeroValue = 0;
 myGenericNumber.add = function(x, y) { return x + y; };
 ```
 
+---
+
 - 实现字符类型
 
 ```
@@ -942,6 +1012,8 @@ stringNumeric.add = function(x, y) { return x + y; };
 
 alert(stringNumeric.add(stringNumeric.zeroValue, "test"));
 ```
+
+---
 
 5. 泛型限制(Generic Constraints)
 
@@ -959,6 +1031,8 @@ function loggingIdentity<T extends Lengthwise>(arg: T): T {
 }
 ```
 
+---
+
 - 传入参数
 
 错误：
@@ -971,6 +1045,8 @@ loggingIdentity(3);  // Error, number doesn't have a .length property
 // 参数是泛型时，类型检测又变宽了
 loggingIdentityW({length: 10, value: 3});
 ```
+
+---
 
 - 在泛型约束中使用类型参数(Using Type Parameters in Generic Constraints)
 
@@ -985,6 +1061,8 @@ getProperty(x, "a"); // okay
 getProperty(x, "m"); // error: Argument of type 'm' isn't assignable to 'a' | 'b' | 'c' | 'd'.
 ```
 
+---
+
 - 在泛型里使用类类型(Using Class Types in Generics)
 
 示例：
@@ -996,16 +1074,41 @@ function create<T>(c: {new(): T; }): T {
 ```
 
 ```
-class BeeKeeper {
+class Keeper {
+    name: string;
+    constructor(name = "keeper") {
+        this.name = name;
+    }
+}
+class BeeKeeper extends Keeper {
     hasMask: boolean;
+    constructor(name = "beeKeeper") {
+        super(name);
+        this.name = name;
+    }
 }
 
-class ZooKeeper {
+class ZooKeeper extends Keeper {
     nametag: string;
+    constructor(name = "zooKeeper") {
+        super(name);
+        this.name = name;
+    }
 }
+
+```
+
+---
+
+```
 
 class Animal {
     numLegs: number;
+    keeper: Keeper;
+    constructor(num: number, keeper: Keeper) {
+        this.numLegs = 2;
+        this.keeper = keeper;
+    }
 }
 
 class Bee extends Animal {
@@ -1016,14 +1119,30 @@ class Lion extends Animal {
     keeper: ZooKeeper;
 }
 
-function createInstance<A extends Animal>(c: new () => A): A {
-    return new c();
-}
-
-createInstance(Lion).keeper.nametag;  // typechecks!
-createInstance(Bee).keeper.hasMask;   // typechecks!
 ```
 
+---
+
+```
+
+function createInstance
+<A extends Animal,
+ B extends Keeper>
+ (
+     animal: new (num: number, keeper: B) => A,
+
+ num: number, 
+ keeper: { new(): B; }
+): A {
+    return new animal(num, new keeper());
+}
+
+console.log(createInstance(Animal, 2, Keeper).numLegs);
+
+console.log(createInstance(Bee, 4, BeeKeeper).keeper);
+console.log(createInstance(Lion, 4, ZooKeeper).keeper);
+
+```
 ---
 装饰器(Decorators)
 ===
@@ -1034,12 +1153,33 @@ createInstance(Bee).keeper.hasMask;   // typechecks!
 ```
 其中`expression`必须是函数，并且可以在运行时被调用。
 
+---
+
 示例：
 ```
 function sealed(target) {
     // do something with 'target' ...
 }
 ```
+
+---
+移除语法报错
+===
+1. 运行tsc时，添加相关参数如下
+```
+tsc --target ES5 --experimentalDecorators
+```
+2. 添加tsconfig.js
+
+```
+{
+    "compilerOptions": {
+        "target": "ES5",
+        "experimentalDecorators": true
+    }
+}
+```
+---
 
 - 最简单的示例
 ```
@@ -1057,6 +1197,8 @@ class aa {
 }
 ```
 
+---
+
 - 装饰器工厂(Decorator Factories)
 通常装饰器都是用来批量生产结果的，因为通常我们需要实现工厂化
 ```
@@ -1066,6 +1208,8 @@ function color(value: string) { // this is the decorator factory
     }
 }
 ```
+
+---
 
 - 装饰器组合
 
@@ -1081,6 +1225,8 @@ function color(value: string) { // this is the decorator factory
 x
 ```
 
+---
+
 - 装饰器求值顺序(Decorator Evaluation)
 
 1. 实例成员上的Parameter Decorators => Method => Accessor => Property Decorators
@@ -1088,12 +1234,10 @@ x
 3. 构建器(constructor)上的Parameter Decorators
 4. 类上的类Decorators
 
-
 ---
 各类装饰器
 ===
 1. 类装饰器(Class Decorators)
-
 
 ```
 function mixins(...list) {
@@ -1112,7 +1256,7 @@ class MyClass {}
 let obj = new MyClass();
 obj['foo']() // 'foo'
 ```
-
+---
 
 ```
 @sealed
@@ -1132,6 +1276,8 @@ function sealed(constructor: Function) {
     Object.seal(constructor.prototype);
 }
 ```
+
+---
 
 2. 方法装饰器(Method Decorators)
 ```
@@ -1154,6 +1300,8 @@ function enumerable(value: boolean) {
 }
 
 ```
+
+---
 
 3. 访问器装饰器(Accessor Decorators)
 
@@ -1180,6 +1328,8 @@ function configurable(value: boolean) {
 }
 
 ```
+
+---
 
 4. 属性装饰器(Property Decorators)
 
@@ -1213,7 +1363,6 @@ function getFormat(target: any, propertyKey: string) {
 
 5. 参数装饰器(Parameter Decorators)
 (略)
-
 
 ---
 
