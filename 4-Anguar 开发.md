@@ -23,8 +23,9 @@ Angular的问题
 ===
 1. 学习成本偏高
 2. 架构高端，理解困难
-4. 概念多，学习难
-5. 项目内容完整，但是太多，会到坏初学者
+3. 概念多，学习难
+4. 项目内容完整，但是太多，会到坏初学者
+5. 资料偏少，版本多
 
 ---
 适合什么样的人群使用？
@@ -673,9 +674,17 @@ ng generate component user
 1. 导入Input
 ```
 import { Component, OnInit, Input } from '@angular/core';
+
+```
+2. 向组件里添加属性user，同是给它一个@Input()
+
+```
+  @Input() user;
 ```
 
-2. 从外部组件接收数据
+---
+
+3. 从外部组件接收数据
 
 将代码
 ```
@@ -857,6 +866,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 这时会报找不到HttpClient找不到的错误，这时我们需要添加HttpClientModule
 ```
 import { HttpClientModule } from '@angular/common/http';
+```
+
+然后再添加到imports中：
+```
+  imports: [    HttpClientModule
+  ]
 ```
 
 这样我们的数据获取就成功了。
